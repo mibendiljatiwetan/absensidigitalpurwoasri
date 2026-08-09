@@ -870,7 +870,10 @@
             let bodyRows = "";
             data.forEach(d => {
                 let cDh = 0, cDhr = 0, cH = 0;
-                let rowHTML = `<tr><td class="text-center">${d.no}</td><td>${d.nama}</td><td class="text-center">${d.ket}</td>`;
+                // Mengatasi agar jika properti kelas bernama ket, kelas, atau rombel tetap terbaca dengan aman
+                let namaKelas = d.ket || d.kelas || d.rombel || '-';
+                
+                let rowHTML = `<tr><td class="text-center">${d.no}</td><td>${d.nama}</td><td class="text-center">${namaKelas}</td>`;
                 
                 for(let i=1; i<=31; i++) {
                     let h = d.presensi[i] || {};
