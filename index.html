@@ -11,9 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- HTML5-QRCode Library (Untuk Scan QR) -->
+    <!-- HTML5-QRCode Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-    <!-- QRCode.js (Untuk Generate QR di ID Card) -->
+    <!-- QRCode.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- jsPDF & AutoTable -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -225,7 +225,7 @@
                 </button>
             </div>
 
-            <!-- SCANNER QR CODE (KAMERA) -->
+            <!-- SCANNER QR CODE -->
             <div id="containerQR">
                 <div id="reader"></div>
                 <div class="mt-2 small text-muted">Arahkan QR Code kartu ke kamera</div>
@@ -315,13 +315,16 @@
                                         <option value="NOV">NOVEMBER</option><option value="DES">DESEMBER</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4 col-6" style="display: none;">
-                                    <input type="hidden" id="filterRole" value="SISWA">
+                                <div class="col-md-4 col-6">
+                                    <label class="small fw-bold">Kelas</label>
+                                    <select id="filterKelasRekap" class="form-select form-select-sm">
+                                        <option value="SEMUA">Semua Kelas</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-8 col-12">
+                                <div class="col-md-4 col-12">
                                     <label class="small text-light d-none d-md-block">.</label>
                                     <button class="btn btn-primary btn-sm w-100" onclick="loadRekapData()">
-                                        <i class="fas fa-search me-1"></i> Tampilkan Rekap Siswa
+                                        <i class="fas fa-search me-1"></i> Tampilkan Rekap
                                     </button>
                                 </div>
                             </div>
@@ -348,7 +351,7 @@
                         <div class="table-rekap-container">
                             <table class="table table-bordered table-striped table-rekap" id="tabelRekapData">
                                 <thead></thead>
-                                <tbody><tr><td colspan="5" class="text-center py-4">Silakan pilih bulan dan klik Tampilkan</td></tr></tbody>
+                                <tbody><tr><td colspan="5" class="text-center py-4">Silakan pilih bulan/kelas dan klik Tampilkan</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -402,9 +405,7 @@
                                     <th>Jam Selesai</th>
                                 </tr>
                             </thead>
-                            <tbody id="scheduleTableBody">
-                                <!-- Diisi otomatis oleh JavaScript -->
-                            </tbody>
+                            <tbody id="scheduleTableBody"></tbody>
                         </table>
                     </div>
                     <div class="d-grid mt-3">
@@ -420,7 +421,6 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // URL Google Apps Script yang diperbarui
         var urlGAS = 'https://script.google.com/macros/s/AKfycbxVPiSrQcmaHUBrrKdUv1nzUUNeKjQVGR6eiP_UmE7cC03GvfcJEIAsb1yBeQSTelUHfg/exec'; 
         let dataPersonal = [];
         let html5QrcodeScanner = null;
@@ -728,10 +728,12 @@
                     }
                     
                     let selectKelas = document.getElementById('filterKelasCard');
+                    let selectKelasRekap = document.getElementById('filterKelasRekap');
                     kelasSet.forEach(k => {
                         let opt = document.createElement('option');
                         opt.value = k; opt.text = k;
                         selectKelas.appendChild(opt);
+                        selectKelasRekap.appendChild(opt.cloneNode(true));
                     });
                     
                     renderIdCardList(); 
@@ -835,10 +837,10 @@
 
         function loadRekapData() {
             const bulan = $('#filterBulan').val();
-            const role = 'SISWA'; 
+            const kelas = $('#filterKelasRekap').val();
             Swal.fire({ title: 'Mengambil Data Rekap Siswa...', didOpen: () => Swal.showLoading() });
 
-            $.post(urlGAS, { mode: 'rekap', bulan: bulan, role: role }).done(function(response) {
+            $.post(urlGAS, { mode: 'rekap', bulan: bulan, role: 'SISWA', kelas: kelas }).done(function(response) {
                 Swal.close();
                 if(typeof response === 'string') { try { response = JSON.parse(response); } catch(e){} }
 
@@ -870,8 +872,7 @@
             let bodyRows = "";
             data.forEach(d => {
                 let cDh = 0, cDhr = 0, cH = 0;
-                // Mengatasi agar jika properti kelas bernama ket, kelas, atau rombel tetap terbaca dengan aman
-                let namaKelas = d.ket || d.kelas || d.rombel || '-';
+                let namaKelas = d.kelas || d.ket || '-';
                 
                 let rowHTML = `<tr><td class="text-center">${d.no}</td><td>${d.nama}</td><td class="text-center">${namaKelas}</td>`;
                 
@@ -902,7 +903,7 @@
             csv.push(header.join(","));
 
             rekapDataCache.forEach(d => {
-                let r = [d.no, `"${d.nama}"`, d.ket];
+                let r = [d.no, `"${d.nama}"`, d.kelas || d.ket || ''];
                 let cDh = 0, cDhr = 0, cH = 0;
                 for(let i=1; i<=31; i++) { 
                     let h = d.presensi[i] || {};
@@ -960,7 +961,6 @@
             printArea.innerHTML = ''; 
 
             let namaSekolah = $('#namaLembaga').text();
-            let alamatSekolah = $('#alamatLembaga').text();
             let logoSrc = $('#logo img').attr('src');
             let bgStyle = `background-image: url('${globalBackground}')`; 
 
