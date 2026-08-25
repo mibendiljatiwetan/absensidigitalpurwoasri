@@ -133,7 +133,6 @@
             border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 90vh;
         }
 
-        /* DESAIN ID CARD TANPA PAS FOTO (DISESUAIKAN PRESISI) */
         .id-card-wrapper {
             width: 85.6mm; height: 53.98mm; border: 1px solid #ddd;
             border-radius: 3.18mm; position: relative; background-color: #fff;
@@ -408,7 +407,7 @@
                 <!-- TAB JADWAL -->
                 <div class="tab-pane fade" id="jadwal-pane" role="tabpanel">
                     <div class="alert alert-info small mb-3">
-                        <i class="fas fa-info-circle me-1"></i> Atur jam mulai dan selesai untuk sesi <strong>DHUHA</strong>, <strong>DHUHUR</strong>, dan <strong>HAID</strong> (Format: <code>07:00-08:00</code> atau ketik <code>LIBUR</code>).
+                        <i class="fas fa-info-circle me-1"></i> Atur jam mulai dan selesai untuk sesi <strong>DHUHA</strong>, <strong>DHUHUR</strong>, dan <strong>HAID</strong> (Format: <code>07:00</code> atau ketik <code>LIBUR</code>).
                     </div>
                     <div class="table-responsive bg-white rounded shadow-sm">
                         <table class="table table-bordered table-sm mb-0" style="font-size:0.85rem">
@@ -453,6 +452,39 @@
             $('#jadwal-tab').on('shown.bs.tab', function() { renderScheduleTable(); });
         });
 
+        // Helper untuk Mengonversi Format Serial Google Sheets / Desimal Ke HH:mm
+        function formatJamFormat(val) {
+            if (!val || val === 'LIBUR' || val === '-') return val || 'LIBUR';
+            let str = val.toString().trim();
+            
+            // Jika desimal waktu bawaan Google Sheet (contoh: 0.291666666)
+            if (!isNaN(str) && !str.includes(':')) {
+                let num = parseFloat(str);
+                if (num < 1) {
+                    let totalMenit = Math.round(num * 24 * 60);
+                    let jam = Math.floor(totalMenit / 60);
+                    let menit = totalMenit % 60;
+                    return jam.toString().padStart(2, '0') + ':' + menit.toString().padStart(2, '0');
+                }
+            }
+
+            // Jika mengandung Date ISO String (contoh: 1899-12-30T07:00:00.000Z)
+            if (str.includes('T') && str.includes(':')) {
+                let parts = str.split('T')[1].split(':');
+                return parts[0] + ':' + parts[1];
+            }
+
+            // Jika format jam standard, bersihkan karakter aneh
+            if (str.includes(':')) {
+                let parts = str.split(':');
+                let jam = parts[0].padStart(2, '0');
+                let menit = parts[1].substr(0, 2);
+                return `${jam}:${menit}`;
+            }
+
+            return str;
+        }
+
         function renderScheduleTable() {
             let raw = localStorage.getItem('presensi_schedule');
             let data = raw ? JSON.parse(raw) : [];
@@ -479,6 +511,11 @@
 
             data.forEach((row) => {
                 let badgeClass = row.sesi === 'DHUHA' ? 'bg-primary' : (row.sesi === 'DHUHUR' ? 'bg-success' : 'bg-warning text-dark');
+                
+                // BERSIHKAN & FORMAT ANGKA MENJADI HH:mm
+                let jamMulai = formatJamFormat(row.mulai);
+                let jamSelesai = formatJamFormat(row.selesai);
+
                 tbody.append(`
                     <tr>
                         <td class="align-middle text-center bg-light">
@@ -487,8 +524,8 @@
                             <input type="hidden" class="sch-hari" value="${row.hari}">
                             <input type="hidden" class="sch-sesi" value="${row.sesi}">
                         </td>
-                        <td class="p-1 align-middle"><input type="text" class="form-control form-control-sm sch-mulai text-center" value="${row.mulai || 'LIBUR'}"></td>
-                        <td class="p-1 align-middle"><input type="text" class="form-control form-control-sm sch-selesai text-center" value="${row.selesai || 'LIBUR'}"></td>
+                        <td class="p-1 align-middle"><input type="text" class="form-control form-control-sm sch-mulai text-center" value="${jamMulai}"></td>
+                        <td class="p-1 align-middle"><input type="text" class="form-control form-control-sm sch-selesai text-center" value="${jamSelesai}"></td>
                     </tr>
                 `);
             });
@@ -583,8 +620,8 @@
                 let schedule = rawSchedule ? JSON.parse(rawSchedule) : [];
                 let rule = schedule.find(s => s.hari === todayName && s.sesi === sesiType);
                 
-                let mulaiStr = rule ? rule.mulai : "LIBUR";
-                let selesaiStr = rule ? rule.selesai : "LIBUR";
+                let mulaiStr = rule ? formatJamFormat(rule.mulai) : "LIBUR";
+                let selesaiStr = rule ? formatJamFormat(rule.selesai) : "LIBUR";
 
                 let now = new Date();
                 let jam = now.getHours().toString().padStart(2, "0");
@@ -663,21 +700,25 @@
             let sDhuhur = schedule.find(s => s.hari === todayName && s.sesi === 'DHUHUR') || {mulai:'-', selesai:'-'};
             let sHaid = schedule.find(s => s.hari === todayName && s.sesi === 'HAID') || {mulai:'-', selesai:'-'};
 
+            let mDhuha = formatJamFormat(sDhuha.mulai), eDhuha = formatJamFormat(sDhuha.selesai);
+            let mDhuhur = formatJamFormat(sDhuhur.mulai), eDhuhur = formatJamFormat(sDhuhur.selesai);
+            let mHaid = formatJamFormat(sHaid.mulai), eHaid = formatJamFormat(sHaid.selesai);
+
             $('#jadwalInfo').html(`
                 <div class="d-flex justify-content-center gap-1 flex-wrap" style="font-size: 0.60rem;">
                     <span class="badge bg-light text-secondary border"><i class="fas fa-calendar-day me-1"></i>${todayName}</span>
-                    <span class="badge bg-light text-secondary border">Dhuha: ${sDhuha.mulai}-${sDhuha.selesai}</span>
-                    <span class="badge bg-light text-secondary border">Dhuhur: ${sDhuhur.mulai}-${sDhuhur.selesai}</span>
-                    <span class="badge bg-light text-secondary border">Haid: ${sHaid.mulai}-${sHaid.selesai}</span>
+                    <span class="badge bg-light text-secondary border">Dhuha: ${mDhuha}-${eDhuha}</span>
+                    <span class="badge bg-light text-secondary border">Dhuhur: ${mDhuhur}-${eDhuhur}</span>
+                    <span class="badge bg-light text-secondary border">Haid: ${mHaid}-${eHaid}</span>
                 </div>
             `);
 
             let totalMenit = parseInt(jam) * 60 + parseInt(menit);
-            const checkActive = (s) => (s && s.mulai !== 'LIBUR' && s.mulai !== '-' && totalMenit >= keMenit(s.mulai) && totalMenit <= keMenit(s.selesai));
+            const checkActive = (mulai, selesai) => (mulai !== 'LIBUR' && mulai !== '-' && totalMenit >= keMenit(mulai) && totalMenit <= keMenit(selesai));
 
             let statusEl = document.getElementById("absenStatus");
             statusEl.className = "status-badge"; 
-            if (checkActive(sDhuha) || checkActive(sDhuhur) || checkActive(sHaid)) {
+            if (checkActive(mDhuha, eDhuha) || checkActive(mDhuhur, eDhuhur) || checkActive(mHaid, eHaid)) {
                 statusEl.classList.add('status-aktif');
                 statusEl.innerText = `Sesi Aktif: ${currentSesi}`;
             } else {
@@ -711,8 +752,6 @@
 
                     if (response.setting) {
                         globalSettings = response.setting;
-                        
-                        // Pembacaan Setting Aman (Mendukung Key-Value Object maupun Array Index)
                         let getVal = (key, idx) => response.setting[key] || (response.setting[idx] ? response.setting[idx].Value : '');
 
                         let namaLembaga = getVal('NAMA LEMBAGA', 0) || "Sekolah";
@@ -728,8 +767,6 @@
                         
                         globalBackground = cekGambar(bgUrl); 
                         $('body').css('background-image', `url('${globalBackground}')`);
-                        
-                        // Simpan Password yang terverifikasi ke Session
                         sessionStorage.setItem('pw', password);
                     }
 
