@@ -7,8 +7,8 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- HTML5-QRCode Library -->
@@ -22,8 +22,9 @@
     <style>
         :root {
             --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
             --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.6);
         }
 
         body {
@@ -46,156 +47,198 @@
         .main-card {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
             width: 100%;
             max-width: 480px;
             text-align: center;
             position: relative;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             margin: auto;
         }
 
         .logo-img {
-            width: 80px; height: 80px;
-            object-fit: contain; margin-bottom: 0.5rem;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            width: 75px; 
+            height: 75px;
+            object-fit: contain; 
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
             transition: 0.3s;
         }
 
-        .school-name { font-weight: 700; color: #1a1a1a; margin-bottom: 0; font-size: 1.25rem; }
-        .school-address { font-size: 0.8rem; color: #666; margin-bottom: 1rem; }
+        .school-name { font-weight: 700; color: #1a1a1a; margin-bottom: 0; font-size: 1.2rem; }
+        .school-address { font-size: 0.8rem; color: #666; margin-bottom: 0.8rem; }
 
         .clock-box {
-            background: #fff; border-radius: 15px; padding: 10px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
-            margin-bottom: 1rem; border: 1px solid rgba(0,0,0,0.04);
+            background: #fff; 
+            border-radius: 16px; 
+            padding: 10px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 1rem; 
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .time-display {
-            font-size: 2.8rem; font-weight: 700; color: var(--primary-color);
-            line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px;
-            transition: 0.3s;
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            color: var(--primary-color);
+            line-height: 1; 
+            font-variant-numeric: tabular-nums; 
+            letter-spacing: -1px;
         }
 
-        .date-display { font-size: 0.95rem; color: #888; margin-top: 5px; font-weight: 500; }
+        .date-display { font-size: 0.85rem; color: #777; margin-top: 4px; font-weight: 500; }
 
         .status-badge {
-            display: inline-block; padding: 10px 20px; border-radius: 12px;
-            font-weight: 600; font-size: 0.9rem; color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); width: 100%; margin-bottom: 10px;
-            white-space: normal; line-height: 1.4;
+            display: inline-block; 
+            padding: 8px 16px; 
+            border-radius: 12px;
+            font-weight: 600; 
+            font-size: 0.85rem; 
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            width: 100%; 
+            margin-bottom: 10px;
+            white-space: normal; 
+            line-height: 1.4;
         }
 
         .status-aktif { background: linear-gradient(135deg, #4361ee, #3f37c9); }
         .status-tutup { background: linear-gradient(135deg, #eb3349, #f45c43); }
 
         .mode-switch {
-            background: #fff; border-radius: 50px; padding: 5px;
-            display: flex; justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 15px;
-            border: 1px solid #eee;
+            background: #f1f3f5; 
+            border-radius: 50px; 
+            padding: 4px;
+            display: flex; 
+            justify-content: space-between;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); 
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
         }
         .mode-btn {
-            border: none; background: transparent; padding: 8px 10px;
-            border-radius: 50px; font-size: 0.85rem; font-weight: 600;
-            color: #666; width: 32%; transition: 0.3s;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            border: none; 
+            background: transparent; 
+            padding: 8px 12px;
+            border-radius: 50px; 
+            font-size: 0.8rem; 
+            font-weight: 600;
+            color: #666; 
+            flex: 1; 
+            transition: all 0.3s ease;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
         }
         .mode-btn.active {
-            background: var(--primary-color); color: white;
+            background: var(--primary-color); 
+            color: white;
             box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
         }
 
         #reader { 
-            width: 100%; border-radius: 15px; overflow: hidden; 
-            border: 1px solid #ddd; min-height: 280px; 
+            width: 100%; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            border: 2px solid #e9ecef; 
+            min-height: 250px; 
             background-color: #000;
         }
 
         .btn-admin {
-            position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
+            position: absolute; top: 15px; right: 15px; width: 38px; height: 38px;
             border-radius: 50%; background: #fff; border: 1px solid #eee;
             color: #555; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer; transition: 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            z-index: 10;
         }
-        .btn-admin:hover { transform: rotate(90deg); color: var(--primary-color); }
+        .btn-admin:hover { transform: rotate(90deg); color: var(--primary-color); background: #f8f9fa; }
 
         #halPetugas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #f8f9fa; z-index: 2000; display: none; overflow-y: auto; padding: 20px 10px;
+            background: #f8f9fa; z-index: 2000; display: none; overflow-y: auto; padding: 15px 10px;
         }
 
         .admin-container {
-            max-width: 900px; margin: 0 auto; background: white; padding: 20px;
-            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 90vh;
+            max-width: 960px; margin: 0 auto; background: white; padding: 20px;
+            border-radius: 20px; box-shadow: 0 5px 25px rgba(0,0,0,0.05); min-height: 90vh;
         }
 
+        /* ID Card Stiling */
         .id-card-wrapper {
             width: 85.6mm; height: 53.98mm; border: 1px solid #ddd;
             border-radius: 3.18mm; position: relative; background-color: #fff;
             overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 0 auto; page-break-inside: avoid; background-size: cover; background-position: center;
+            margin: 0 auto 10px auto; page-break-inside: avoid; background-size: cover; background-position: center;
         }
         .id-card-overlay {
             position: absolute; top:0; left:0; width:100%; height:100%;
-            background: rgba(255, 255, 255, 0.85); z-index: 1;
+            background: rgba(255, 255, 255, 0.88); z-index: 1;
         }
         .id-card-content {
             position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 10px;
         }
         .idc-header {
             display: flex; align-items: center; border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 5px; margin-bottom: 5px;
+            padding-bottom: 4px; margin-bottom: 6px;
         }
-        .idc-logo { width: 35px; height: 35px; object-fit: contain; margin-right: 8px; }
-        .idc-school { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #000; line-height: 1.1; }
-        .idc-address { font-size: 6px; color: #444; font-weight: normal; }
+        .idc-logo { width: 32px; height: 32px; object-fit: contain; margin-right: 8px; }
+        .idc-school { font-size: 9.5px; font-weight: bold; text-transform: uppercase; color: #000; line-height: 1.1; }
         .idc-body { display: flex; flex: 1; align-items: center; }
-        .idc-photo-box { width: 75px; height: 100px; border: 2px solid #ccc; border-radius: 4px; overflow: hidden; margin-right: 10px; background: #eee; }
+        .idc-photo-box { width: 70px; height: 90px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; margin-right: 10px; background: #eee; flex-shrink: 0; }
         .idc-photo { width: 100%; height: 100%; object-fit: cover; }
-        .idc-details { flex: 1; }
-        .idc-name { font-size: 12px; font-weight: bold; color: #000; margin-bottom: 2px; }
-        .idc-role { display: inline-block; background: var(--primary-color); color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 4px; margin-bottom: 5px; }
-        .idc-id { font-size: 10px; color: #333; font-family: monospace; }
-        .idc-ket { font-size: 9px; color: #555; }
-        .idc-qr { position: absolute; bottom: 8px; right: 8px; padding: 3px; background: #fff; border: 1px solid #eee; }
-        .idc-qr img { width: 70px; height: 70px; display: block; }
+        .idc-details { flex: 1; overflow: hidden; }
+        .idc-name { font-size: 11px; font-weight: bold; color: #000; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .idc-role { display: inline-block; background: var(--primary-color); color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 4px; margin-bottom: 4px; }
+        .idc-id { font-size: 9.5px; color: #333; font-family: monospace; }
+        .idc-ket { font-size: 8.5px; color: #555; }
+        .idc-qr { position: absolute; bottom: 8px; right: 8px; padding: 2px; background: #fff; border: 1px solid #eee; border-radius: 4px; }
+        .idc-qr img { width: 62px; height: 62px; display: block; }
 
+        /* Rekap Table */
+        .table-rekap-container { max-height: 450px; overflow-x: auto; border: 1px solid #dee2e6; border-radius: 8px; margin-top: 15px; }
+        .table-rekap { font-size: 0.78rem; white-space: nowrap; margin-bottom: 0; }
+        .table-rekap th { background-color: #212529 !important; color: #ffffff !important; position: sticky; top: 0; z-index: 10; border: 1px solid #373b3e; text-align: center; }
+
+        /* Media Queries untuk HP & Tablet */
         @media (max-width: 576px) {
-            .main-card { padding: 1.5rem; border-radius: 20px; }
+            body { padding: 5px; }
+            .main-card { padding: 1.25rem 1rem; border-radius: 18px; }
             .logo-img { width: 60px; height: 60px; }
-            .school-name { font-size: 1.1rem; }
-            .time-display { font-size: 2.2rem; }
-            .mode-btn { font-size: 0.75rem; padding: 6px 5px; }
+            .school-name { font-size: 1.05rem; }
+            .time-display { font-size: 2.1rem; }
+            .mode-btn { font-size: 0.75rem; padding: 6px 4px; }
             #halPetugas { padding: 0; background: white; }
-            .admin-container { box-shadow: none; border-radius: 0; padding: 15px; min-height: 100vh; }
+            .admin-container { box-shadow: none; border-radius: 0; padding: 12px; min-height: 100vh; }
             .btn-admin { top: 10px; right: 10px; }
+            .nav-tabs .nav-link { padding: 8px 10px; font-size: 0.8rem; }
         }
 
-        .table-rekap-container { max-height: 400px; overflow-x: auto; border: 1px solid #eee; border-radius: 8px; margin-top: 15px; }
-        .table-rekap { font-size: 0.8rem; white-space: nowrap; }
-        .table-rekap th { background-color: #343a40 !important; color: #ffffff !important; position: sticky; top: 0; z-index: 10; border: 1px solid #454d55; }
-
+        /* Mode Cetak (Print) */
         @media print {
             @page { size: auto; margin: 5mm; }
             body, html { background: white !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
             body * { visibility: hidden; }
-            #halPetugas, .admin-container, .tab-content, .tab-pane { position: static !important; display: block !important; background: white !important; }
+            #halPetugas, .admin-container, .tab-content, .tab-pane { position: static !important; display: block !important; background: white !important; padding: 0 !important; margin: 0 !important; }
+            
             body.printing-idcard #printAreaIDCard, body.printing-idcard #printAreaIDCard * { visibility: visible; }
-            body.printing-idcard #printAreaIDCard { position: absolute; left: 0; top: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 2mm; }
-            .id-card-wrapper { border: 1px solid #000; break-inside: avoid; }
+            body.printing-idcard #printAreaIDCard { position: absolute; left: 0; top: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 4mm; justify-content: flex-start; }
+            .id-card-wrapper { border: 1px solid #000; break-inside: avoid; margin: 0; }
+            
             body.printing-rekap #printableArea, body.printing-rekap #printableArea * { visibility: visible; }
-            body.printing-rekap #printableArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; }
-            .no-print, .btn-admin, .mode-switch, .clock-box, #absenStatus, #containerQR, #adminTabs, .btn, input, select, .form-check, .list-group { display: none !important; }
+            body.printing-rekap #printableArea { position: absolute; left: 0; top: 0; width: 100%; padding: 10px; background: white; }
+            .no-print, .btn-admin, .mode-switch, .clock-box, #absenStatus, #containerQR, #adminTabs, .btn, input, select, .form-check, .list-group, .d-print-none { display: none !important; }
+            .table-rekap-container { max-height: none !important; overflow: visible !important; border: none !important; }
+            .table-rekap th, .table-rekap td { border: 1px solid #000 !important; color: #000 !important; font-size: 8pt !important; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container d-flex justify-content-center">
+    <div class="container d-flex justify-content-center p-0">
         <div class="main-card text-center" id="mainCard" style="display:none">
             <button class="btn-admin" onclick="halPetugas()" title="Admin"><i class="fas fa-cog"></i></button>
 
@@ -208,7 +251,7 @@
                 <div class="date-display" id="date">-</div>
             </div>
 
-            <!-- STATUS -->
+            <!-- STATUS JADWAL PRESENSI -->
             <div id="absenStatus" class="status-badge status-tutup">MEMUAT...</div>
             <div class="small text-muted mb-3" id="jadwalInfo"></div>
 
@@ -228,24 +271,24 @@
             <!-- SCANNER QR CODE -->
             <div id="containerQR">
                 <div id="reader"></div>
-                <div class="mt-2 small text-muted">Arahkan QR Code kartu ke kamera</div>
+                <div class="mt-2 small text-muted"><i class="fas fa-qrcode me-1"></i>Arahkan QR Code kartu ke kamera</div>
             </div>
             
-            <!-- INFORMASI SISTEM -->
+            <!-- INFORMASI FOOTER SISTEM -->
             <div class="mt-4 pt-3 border-top text-muted small" style="font-size: 0.7rem;">
-                <p class="m-0">Sistem Presensi QR Code v1.1</p>
+                <p class="m-0 fw-semibold">Sistem Presensi QR Code v1.2</p>
                 <p class="m-0">&copy; <span id="footerYear"></span> <span id="footerSchool"></span></p>
             </div>
         </div>
     </div>
 
-    <!-- PANEL ADMIN -->
+    <!-- PANEL ADMIN (OVERLAY) -->
     <div id="halPetugas">
         <div class="admin-container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bold m-0"><i class="fas fa-user-shield me-2"></i>Admin</h4>
-                <button class="btn btn-outline-dark rounded-pill btn-sm" onclick="tutupAdmin()">
-                    <i class="fas fa-times"></i> Tutup
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h5 class="fw-bold m-0 text-primary"><i class="fas fa-user-shield me-2"></i>Panel Admin</h5>
+                <button class="btn btn-outline-danger rounded-pill btn-sm" onclick="tutupAdmin()">
+                    <i class="fas fa-times me-1"></i> Tutup
                 </button>
             </div>
 
@@ -255,46 +298,47 @@
                     <button class="nav-link active" id="sync-tab" data-bs-toggle="tab" data-bs-target="#sync-pane" type="button">Sinkronisasi</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-pane" type="button">Input Manual</button>
+                    <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-pane" type="button">Manual</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="rekap-tab" data-bs-toggle="tab" data-bs-target="#rekap-pane" type="button">Rekap Bulanan</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="idcard-tab" data-bs-toggle="tab" data-bs-target="#idcard-pane" type="button"><i class="fas fa-print me-1"></i> ID Card</button>
+                    <button class="nav-link" id="idcard-tab" data-bs-toggle="tab" data-bs-target="#idcard-pane" type="button"><i class="fas fa-id-card me-1"></i> Cetak Kartu</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="jadwal-tab" data-bs-toggle="tab" data-bs-target="#jadwal-pane" type="button"><i class="fas fa-calendar-alt me-1"></i> Jadwal</button>
+                    <button class="nav-link" id="jadwal-tab" data-bs-toggle="tab" data-bs-target="#jadwal-pane" type="button"><i class="fas fa-clock me-1"></i> Jadwal</button>
                 </li>
             </ul>
 
             <div class="tab-content" id="adminTabContent">
                 <!-- TAB SINKRONISASI -->
                 <div class="tab-pane fade show active" id="sync-pane" role="tabpanel">
-                    <div class="alert alert-secondary text-center p-3">
+                    <div class="alert alert-secondary text-center p-3 mb-3">
                         <h5 class="m-0 fw-bold" id="banyak">0 Data</h5>
-                        <small>Belum disinkron ke Google Sheet</small>
+                        <small class="text-muted">Tersimpan lokal (Belum disinkron ke Google Sheet)</small>
                     </div>
-                    <div class="list-group list-group-flush mb-4 border rounded" id="dataPresensi" style="max-height: 40vh; overflow-y: auto;"></div>
+                    <div class="list-group list-group-flush mb-3 border rounded" id="dataPresensi" style="max-height: 42vh; overflow-y: auto;"></div>
                     <div class="row g-2">
-                        <div class="col-6"><button class="btn btn-danger w-100 py-3 rounded-3" onclick="bersihkanPresensi()"><i class="fas fa-trash me-1"></i> Hapus</button></div>
-                        <div class="col-6"><button class="btn btn-success w-100 py-3 rounded-3" onclick="sinkron()"><i class="fas fa-cloud-upload-alt me-1"></i> Kirim</button></div>
+                        <div class="col-6"><button class="btn btn-outline-danger w-100 py-2 rounded-3" onclick="bersihkanPresensi()"><i class="fas fa-trash me-1"></i> Hapus Lokal</button></div>
+                        <div class="col-6"><button class="btn btn-success w-100 py-2 rounded-3" onclick="sinkron()"><i class="fas fa-cloud-upload-alt me-1"></i> Kirim Data</button></div>
                     </div>
                 </div>
 
                 <!-- TAB INPUT MANUAL -->
                 <div class="tab-pane fade" id="manual-pane" role="tabpanel">
-                    <div class="card border-0 shadow-sm p-4 bg-light rounded">
-                        <label class="form-label fw-bold"><i class="fas fa-keyboard me-2"></i>Input Presensi Manual Siswa</label>
-                        <p class="small text-muted mb-3">Ketik Nama atau ID siswa.</p>
+                    <div class="card border-0 shadow-sm p-3 bg-light rounded">
+                        <label class="form-label fw-bold"><i class="fas fa-keyboard me-2"></i>Input Presensi Manual Siswa/Siswi</label>
+                        <p class="small text-muted mb-2">Ketik ID atau Nama siswa dari pilihan.</p>
                         <div class="input-group mb-3">
-                            <input type="text" id="manualInputId" class="form-control form-control-lg" placeholder="Cari Nama / ID Siswa..." list="datalistPersonal">
+                            <input type="text" id="manualInputId" class="form-control" placeholder="Cari ID / Nama Siswa..." list="datalistPersonal" autocomplete="off">
                         </div>
-                        <div class="d-flex gap-2 mb-3">
-                            <button class="btn btn-primary flex-grow-1" onclick="submitManual('DHUHA')">Hadir Dhuha</button>
-                            <button class="btn btn-success flex-grow-1" onclick="submitManual('DHUHUR')">Hadir Dhuhur</button>
-                            <button class="btn btn-warning flex-grow-1 text-white" onclick="submitManual('HAID')">Siswi Haid</button>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            <button class="btn btn-primary flex-grow-1" onclick="submitManual('DHUHA')"><i class="fas fa-sun me-1"></i> Hadir Dhuha</button>
+                            <button class="btn btn-success flex-grow-1" onclick="submitManual('DHUHUR')"><i class="fas fa-mosque me-1"></i> Hadir Dhuhur</button>
+                            <button class="btn btn-warning flex-grow-1 text-dark" onclick="submitManual('HAID')"><i class="fas fa-female me-1"></i> Izin Haid (Siswi)</button>
                         </div>
+                        <div class="form-text small text-muted"><i class="fas fa-info-circle me-1"></i>Status <strong>Haid</strong> hanya berlaku untuk data siswi berjenis kelamin Perempuan.</div>
                         <datalist id="datalistPersonal"></datalist>
                     </div>
                 </div>
@@ -305,7 +349,7 @@
                         <div class="card-body bg-light rounded p-3">
                             <div class="row g-2 align-items-center">
                                 <div class="col-md-4 col-6">
-                                    <label class="small fw-bold">Bulan</label>
+                                    <label class="small fw-bold mb-1">Bulan</label>
                                     <select id="filterBulan" class="form-select form-select-sm">
                                         <option value="JAN">JANUARI</option><option value="FEB">FEBRUARI</option>
                                         <option value="MAR">MARET</option><option value="APR">APRIL</option>
@@ -316,13 +360,13 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 col-6">
-                                    <label class="small fw-bold">Kelas</label>
+                                    <label class="small fw-bold mb-1">Kelas</label>
                                     <select id="filterKelasRekap" class="form-select form-select-sm">
                                         <option value="SEMUA">Semua Kelas</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 col-12">
-                                    <label class="small text-light d-none d-md-block">.</label>
+                                    <label class="small text-light d-none d-md-block mb-1">Action</label>
                                     <button class="btn btn-primary btn-sm w-100" onclick="loadRekapData()">
                                         <i class="fas fa-search me-1"></i> Tampilkan Rekap
                                     </button>
@@ -331,27 +375,27 @@
                         </div>
                     </div>
 
-                    <div id="exportButtons" class="d-none mb-3 text-end">
-                        <button class="btn btn-success btn-sm me-1" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> CSV</button>
-                        <button class="btn btn-danger btn-sm me-1" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
-                        <button class="btn btn-secondary btn-sm" onclick="printRekap()"><i class="fas fa-print"></i> Cetak</button>
+                    <div id="exportButtons" class="d-none mb-2 text-end">
+                        <button class="btn btn-success btn-sm me-1" onclick="exportToCSV()"><i class="fas fa-file-csv me-1"></i> CSV</button>
+                        <button class="btn btn-danger btn-sm me-1" onclick="exportToPDF()"><i class="fas fa-file-pdf me-1"></i> PDF</button>
+                        <button class="btn btn-secondary btn-sm" onclick="printRekap()"><i class="fas fa-print me-1"></i> Cetak</button>
                     </div>
 
                     <div id="printableArea">
-                        <div id="printHeader" class="d-none mb-4">
-                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
-                                <div style="width: 100px; text-align: left;"><img id="printLogoKiri" src="" style="width: 80px; height: 80px; object-fit: contain;"></div>
+                        <div id="printHeader" class="d-none mb-3">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px;">
+                                <div style="width: 70px; text-align: left;"><img id="printLogoKiri" src="" style="width: 60px; height: 60px; object-fit: contain;"></div>
                                 <div style="flex: 1; text-align: center;">
-                                    <h3 id="printHeader1" style="margin: 0; font-weight: bold; font-size: 1.2rem; text-transform: uppercase;"></h3>
-                                    <h5 id="printHeader3" style="margin: 0; font-weight: bold; font-size: 1.4rem;"></h5>
+                                    <h4 id="printHeader1" style="margin: 0; font-weight: bold; font-size: 1.1rem; text-transform: uppercase;"></h4>
+                                    <h6 id="printHeader3" style="margin: 0; color: #333; font-size: 0.9rem;"></h6>
                                 </div>
                             </div>
-                            <h5 class="fw-bold text-center">REKAPITULASI SHOLAT & HAID SISWA BULAN <span id="printBulan"></span></h5>
+                            <h6 class="fw-bold text-center mb-2">REKAPITULASI SHOLAT & HAID SISWA - BULAN <span id="printBulan"></span></h6>
                         </div>
                         <div class="table-rekap-container">
                             <table class="table table-bordered table-striped table-rekap" id="tabelRekapData">
                                 <thead></thead>
-                                <tbody><tr><td colspan="5" class="text-center py-4">Silakan pilih bulan/kelas dan klik Tampilkan</td></tr></tbody>
+                                <tbody><tr><td colspan="5" class="text-center py-4">Silakan pilih bulan/kelas dan klik Tampilkan Rekap</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -359,48 +403,41 @@
 
                 <!-- TAB CETAK ID CARD -->
                 <div class="tab-pane fade" id="idcard-pane" role="tabpanel">
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-md-4 border-end">
-                            <h5 class="fw-bold mb-3">Pilih Data Siswa</h5>
-                            <div class="mb-3">
-                                <label class="small fw-bold">Desain Background:</label>
-                                <select id="bgSelector" class="form-select form-select-sm" onchange="generateIdCards(false)">
-                                    <option value="default">Default</option>
-                                    <option value="white">Putih Bersih</option>
-                                    <option value="blue">Biru Kristal</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="small">Filter Kelas:</label>
+                            <h6 class="fw-bold mb-3"><i class="fas fa-filter me-1"></i>Pilih Data Cetak</h6>
+                            <div class="mb-2">
+                                <label class="small fw-bold mb-1">Filter Kelas:</label>
                                 <select id="filterKelasCard" class="form-select form-select-sm" onchange="renderIdCardList()">
                                     <option value="SEMUA">Semua Kelas</option>
                                 </select>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" id="checkAllCard" onchange="toggleAllCards(this)">
-                                <label class="form-check-label fw-bold small" for="checkAllCard">Pilih Semua</label>
+                                <label class="form-check-label fw-bold small" for="checkAllCard">Pilih Semua Siswa</label>
                             </div>
-                            <div class="list-group list-group-flush border" id="listIdCard" style="height: 300px; overflow-y: auto;"></div>
-                            <div class="d-grid mt-3">
-                                <button class="btn btn-primary" onclick="generateIdCards(true)"><i class="fas fa-print me-1"></i> Buat & Cetak ID Card</button>
+                            <div class="list-group list-group-flush border rounded mb-3" id="listIdCard" style="height: 260px; overflow-y: auto;"></div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-sm" onclick="generateIdCards(true)"><i class="fas fa-print me-1"></i> Cetak ID Card Terpilih</button>
                             </div>
                         </div>
-                        <div class="col-md-8 bg-light d-flex align-items-center justify-content-center p-4">
-                            <div id="printAreaIDCard" style="width: 100%;"></div>
+                        <div class="col-md-8 bg-light rounded p-3 d-flex flex-column align-items-center justify-content-start" style="min-height: 350px;">
+                            <div class="small text-muted mb-2 w-100 text-center border-bottom pb-1"><i class="fas fa-eye me-1"></i>Pratinjau Cetak</div>
+                            <div id="printAreaIDCard" class="w-100 d-flex flex-wrap gap-2 justify-content-center"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- TAB JADWAL -->
                 <div class="tab-pane fade" id="jadwal-pane" role="tabpanel">
-                    <div class="alert alert-info small mb-3">
-                        <i class="fas fa-info-circle me-1"></i> Atur jam mulai dan selesai untuk sesi <strong>DHUHA</strong>, <strong>DHUHUR</strong>, dan <strong>HAID</strong> (Format: <code>07:00-08:00</code> atau ketik <code>LIBUR</code>).
+                    <div class="alert alert-info small mb-3 p-2">
+                        <i class="fas fa-info-circle me-1"></i> Atur rentang waktu presensi (Format: <code>07:00-08:00</code> atau ketik <code>LIBUR</code>).
                     </div>
-                    <div class="table-responsive bg-white rounded shadow-sm">
-                        <table class="table table-bordered table-sm mb-0" style="font-size:0.85rem">
+                    <div class="table-responsive bg-white rounded border">
+                        <table class="table table-bordered table-sm mb-0" style="font-size:0.82rem">
                             <thead class="table-light">
                                 <tr class="text-center">
-                                    <th style="width: 25%">Hari / Sesi</th>
+                                    <th style="width: 30%">Hari / Sesi</th>
                                     <th>Jam Mulai</th>
                                     <th>Jam Selesai</th>
                                 </tr>
@@ -418,6 +455,7 @@
         </div>
     </div>
 
+    <!-- SCRIPTS -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -507,7 +545,7 @@
                 }
             }).fail(() => {
                 Swal.close();
-                Swal.fire('Error', 'Koneksi gagal.', 'error');
+                Swal.fire('Error', 'Koneksi ke server gagal.', 'error');
             });
         }
 
@@ -525,12 +563,17 @@
             if (sesi === 'DHUHA') $('#btnModeDhuha').addClass('active');
             else if (sesi === 'DHUHUR') $('#btnModeDhuhur').addClass('active');
             else if (sesi === 'HAID') $('#btnModeHaid').addClass('active');
+            
+            let statusEl = document.getElementById("absenStatus");
+            if (statusEl.classList.contains('status-aktif')) {
+                statusEl.innerText = `Sesi Aktif: ${currentSesi}`;
+            }
         }
 
         function startQRScanner() {
             if (typeof Html5QrcodeScanner === 'undefined') return;
             if (html5QrcodeScanner) return; 
-            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 240 });
             html5QrcodeScanner.render(onScanSuccess, onScanFailure);
         }
 
@@ -551,17 +594,30 @@
         function onScanFailure(error) {}
 
         function submitManual(sesiType) {
-            let inputVal = document.getElementById('manualInputId').value;
+            let inputVal = document.getElementById('manualInputId').value.trim();
             if (!inputVal) return;
             prosesPresensi(inputVal, sesiType);
             document.getElementById('manualInputId').value = ""; 
         }
 
-        function prosesPresensi(id, sesiType) {
-            id = id.toString().replace(/[\s.,]/g, ''); 
-            let found = dataPersonal.find(i => i.id === id);
+        function prosesPresensi(idInput, sesiType) {
+            let cleanQuery = idInput.toString().replace(/[\s.,]/g, '').toLowerCase(); 
+            // Cari berdasarkan ID atau nama
+            let found = dataPersonal.find(i => i.id.toLowerCase() === cleanQuery || i.nama.toLowerCase().includes(cleanQuery));
 
             if (found) {
+                // Validasi Gender untuk Sesi Haid
+                if (sesiType === 'HAID') {
+                    let isPerempuan = found.gender === 'P' || (found.ket && found.ket.toLowerCase().includes('p')) || found.nama.toLowerCase().includes('niswi');
+                    if (found.gender && found.gender.toUpperCase() === 'L') {
+                        isPerempuan = false;
+                    }
+                    if (!isPerempuan) {
+                        Swal.fire({ icon: 'error', title: 'Fitur Khusus Siswi', text: 'Status Haid hanya dapat diproses untuk siswi (Perempuan).', timer: 2500, showConfirmButton: false });
+                        return;
+                    }
+                }
+
                 const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
                 const todayName = days[new Date().getDay()]; 
                 
@@ -608,17 +664,20 @@
                     let badgeClass = sesiType === 'HAID' ? 'text-warning' : 'text-success';
 
                     Swal.fire({
-                        title: found.nama, text: `Siswa - ${found.ket}`,
+                        title: found.nama, 
+                        text: `Siswa - ${found.ket}`,
                         imageUrl: cekGambar(found.foto), 
-                        imageWidth: 150, imageHeight: 200, 
-                        html: `<h3 class="mt-2 ${badgeClass}">${badgeTitle}</h3><div class="fs-4 fw-bold">${jamSimpan}</div><div class="mt-2 small text-muted">Data Disimpan Lokal</div>`,
-                        timer: 2500, showConfirmButton: false
+                        imageWidth: 140, 
+                        imageHeight: 180, 
+                        html: `<h3 class="mt-2 ${badgeClass} fw-bold">${badgeTitle}</h3><div class="fs-4 fw-bold">${jamSimpan} WIB</div><div class="mt-2 small text-muted">Data Disimpan Lokal</div>`,
+                        timer: 2500, 
+                        showConfirmButton: false
                     });
                 } else {
-                    Swal.fire({ icon: 'warning', title: 'Diluar Jam Sesi', text: `Sesi ${sesiType} belum dibuka atau sudah ditutup.`, timer: 2000, showConfirmButton: false });
+                    Swal.fire({ icon: 'warning', title: 'Diluar Jam Sesi', text: `Sesi ${sesiType} (${mulaiStr} - ${selesaiStr}) belum dibuka atau sudah ditutup.`, timer: 2500, showConfirmButton: false });
                 }
             } else {
-                Swal.fire({ icon: 'error', title: 'Data Tidak Ditemukan', text: `ID/QR siswa tidak terdaftar.`, timer: 1500, showConfirmButton: false });
+                Swal.fire({ icon: 'error', title: 'Data Tidak Ditemukan', text: `ID atau nama siswa tidak terdaftar dalam sistem.`, timer: 2000, showConfirmButton: false });
             }
         }
 
@@ -652,11 +711,11 @@
             let sHaid = schedule.find(s => s.hari === todayName && s.sesi === 'HAID') || {mulai:'-', selesai:'-'};
 
             $('#jadwalInfo').html(`
-                <div class="d-flex justify-content-center gap-1 flex-wrap" style="font-size: 0.60rem;">
-                    <span class="badge bg-light text-secondary border"><i class="fas fa-calendar-day me-1"></i>${todayName}</span>
-                    <span class="badge bg-light text-secondary border">Dhuha: ${sDhuha.mulai}-${sDhuha.selesai}</span>
-                    <span class="badge bg-light text-secondary border">Dhuhur: ${sDhuhur.mulai}-${sDhuhur.selesai}</span>
-                    <span class="badge bg-light text-secondary border">Haid: ${sHaid.mulai}-${sHaid.selesai}</span>
+                <div class="d-flex justify-content-center gap-1 flex-wrap" style="font-size: 0.65rem;">
+                    <span class="badge bg-light text-dark border"><i class="fas fa-calendar-day me-1"></i>${todayName}</span>
+                    <span class="badge bg-light text-dark border">Dhuha: ${sDhuha.mulai}-${sDhuha.selesai}</span>
+                    <span class="badge bg-light text-dark border">Dhuhur: ${sDhuhur.mulai}-${sDhuhur.selesai}</span>
+                    <span class="badge bg-light text-dark border">Haid: ${sHaid.mulai}-${sHaid.selesai}</span>
                 </div>
             `);
 
@@ -681,7 +740,7 @@
         }
 
         function firstLoad() {
-            Swal.fire({ title: 'Memuat...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            Swal.fire({ title: 'Memuat System...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             $.ajax({
                 url: urlGAS + "?mode=load",
                 method: 'GET',
@@ -702,10 +761,14 @@
                         $('#namaLembaga').text(response.setting[0].Value);
                         $('#footerSchool').text(response.setting[0].Value);
                         $('#alamatLembaga').text(response.setting[1].Value);
-                        $('#logo').html(`<img src="${cekGambar(response.setting[2].Value)}" class="logo-img">`);
-                        globalBackground = cekGambar(response.setting[3].Value); 
-                        $('body').css('background-image', `url('${globalBackground}')`);
-                        sessionStorage.setItem('pw', response.setting[4].Value);
+                        $('#logo').html(`<img src="${cekGambar(response.setting[2].Value)}" class="logo-img" alt="Logo">`);
+                        if (response.setting[3] && response.setting[3].Value) {
+                            globalBackground = cekGambar(response.setting[3].Value); 
+                            $('body').css('background-image', `url('${globalBackground}')`);
+                        }
+                        if (response.setting[4]) {
+                            sessionStorage.setItem('pw', response.setting[4].Value);
+                        }
                     }
 
                     dataPersonal = [];
@@ -715,9 +778,9 @@
 
                     if (response.personal) {
                         response.personal.split("#").forEach(item => {
-                            let [id, nama, role, ket, baris, foto] = item.split(";");
+                            let [id, nama, role, ket, baris, foto, gender] = item.split(";");
                             if (!role || role.toUpperCase().trim() === 'SISWA') {
-                                dataPersonal.push({ id, nama, role: 'SISWA', ket, baris, foto });
+                                dataPersonal.push({ id, nama, role: 'SISWA', ket, baris, foto, gender: gender || '' });
                                 let opt = document.createElement('option');
                                 opt.value = id;
                                 opt.innerText = `${nama} (${ket})`;
@@ -729,6 +792,9 @@
                     
                     let selectKelas = document.getElementById('filterKelasCard');
                     let selectKelasRekap = document.getElementById('filterKelasRekap');
+                    selectKelas.innerHTML = '<option value="SEMUA">Semua Kelas</option>';
+                    selectKelasRekap.innerHTML = '<option value="SEMUA">Semua Kelas</option>';
+
                     kelasSet.forEach(k => {
                         let opt = document.createElement('option');
                         opt.value = k; opt.text = k;
@@ -742,7 +808,7 @@
                 error: function() { 
                     Swal.close();
                     $('#mainCard').fadeIn(); 
-                    Swal.fire({ icon: 'error', title: 'Gagal Memuat Data', text: 'Terjadi kesalahan koneksi.' });
+                    Swal.fire({ icon: 'error', title: 'Gagal Memuat Data', text: 'Koneksi terputus atau URL backend tidak valid.' });
                 }
             });
         }
@@ -760,13 +826,15 @@
             Swal.fire({
                 title: 'Password Admin', input: 'password', showCancelButton: true, confirmButtonText: 'Login'
             }).then((res) => {
-                if (res.isConfirmed && res.value == sessionStorage.getItem('pw')) {
+                if (res.isConfirmed && res.value == (sessionStorage.getItem('pw') || 'admin')) {
                     stopQRScanner();
                     var firstTab = new bootstrap.Tab(document.querySelector('#sync-tab'));
                     firstTab.show();
                     $('#halPetugas').fadeIn(); 
                     loadPresensi(); 
-                } else if(res.isConfirmed) Swal.fire('Salah', 'Password salah', 'error');
+                } else if(res.isConfirmed) {
+                    Swal.fire('Password Salah', 'Kode akses admin tidak cocok', 'error');
+                }
             });
         }
 
@@ -788,18 +856,18 @@
                     let p = dataPersonal.find(x => x.baris == v[0]) || {nama:'?', ket:'?'};
                     let badgeColor = v[3] === 'DHUHA' ? 'primary' : (v[3] === 'DHUHUR' ? 'success' : 'warning text-dark');
 
-                    let item = `<div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div><strong>${p.nama}</strong><br><small>${p.ket} | ${v[1]} ${v[2]}</small></div>
-                        <div class="text-end"><span class="badge bg-${badgeColor}">${v[3]}</span><br><strong>${v[4]}</strong></div>
+                    let item = `<div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3">
+                        <div><strong>${p.nama}</strong><br><small class="text-muted">${p.ket} | Tgl: ${v[1]} ${v[2]}</small></div>
+                        <div class="text-end"><span class="badge bg-${badgeColor}">${v[3]}</span><br><strong class="small">${v[4]} WIB</strong></div>
                     </div>`;
                     list.insertAdjacentHTML('beforeend', item);
                 }
             }
-            if(document.getElementById('banyak')) document.getElementById('banyak').text = `${count} Data`;
+            if(document.getElementById('banyak')) document.getElementById('banyak').innerText = `${count} Data`;
         }
 
         function bersihkanPresensi() {
-            Swal.fire({ title: 'Hapus Semua?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya' }).then((r) => {
+            Swal.fire({ title: 'Hapus Semua Presensi Lokal?', text: 'Data yang belum disinkron akan hilang.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus' }).then((r) => {
                 if (r.isConfirmed) {
                     let keysToRemove = [];
                     for (let i = 0; i < localStorage.length; i++) {
@@ -808,6 +876,7 @@
                     }
                     keysToRemove.forEach(k => localStorage.removeItem(k));
                     loadPresensi();
+                    Swal.fire('Terhapus', 'Data lokal berhasil dibersihkan.', 'success');
                 }
             });
         }
@@ -821,9 +890,9 @@
                     keys.push(k); 
                 }
             }
-            if(data.length === 0) return Swal.fire('Info', 'Data kosong', 'info');
+            if(data.length === 0) return Swal.fire('Info', 'Tidak ada data presensi lokal untuk dikirim.', 'info');
 
-            Swal.fire({ title: 'Mengirim...', didOpen: () => Swal.showLoading() });
+            Swal.fire({ title: 'Mengirim Data...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             $.post(urlGAS, { mode: 'tulispresensi', data: JSON.stringify(data) }).done((res) => {
                 Swal.close();
                 let response = typeof res === 'string' ? JSON.parse(res) : res;
@@ -831,14 +900,14 @@
                     keys.forEach(k => localStorage.removeItem(k));
                     loadPresensi();
                     Swal.fire('Berhasil', response.message, 'success');
-                } else Swal.fire('Gagal', response.error, 'error');
-            }).fail(() => Swal.fire('Error', 'Gagal koneksi', 'error'));
+                } else Swal.fire('Gagal', response.error || 'Terjadi kesalahan.', 'error');
+            }).fail(() => Swal.fire('Error', 'Gagal koneksi ke server Google Sheet.', 'error'));
         }
 
         function loadRekapData() {
             const bulan = $('#filterBulan').val();
             const kelas = $('#filterKelasRekap').val();
-            Swal.fire({ title: 'Mengambil Data Rekap Siswa...', didOpen: () => Swal.showLoading() });
+            Swal.fire({ title: 'Mengambil Data Rekap Siswa...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
             $.post(urlGAS, { mode: 'rekap', bulan: bulan, role: 'SISWA', kelas: kelas }).done(function(response) {
                 Swal.close();
@@ -857,7 +926,7 @@
                         $('#printHeader3').text(globalSettings[1].Value);
                     }
                 } else {
-                    Swal.fire('Gagal', response.error || 'Gagal memuat data.', 'error');
+                    Swal.fire('Gagal', response.error || 'Gagal memuat data rekap.', 'error');
                 }
             }).fail(function() { Swal.close(); Swal.fire('Error', 'Gagal koneksi ke server.', 'error'); });
         }
@@ -866,7 +935,7 @@
             let headerRow = `<tr><th rowspan="2" class="align-middle text-center">No</th><th rowspan="2" class="align-middle text-center">Nama Siswa</th><th rowspan="2" class="align-middle text-center">Kelas</th>`;
             for(let i=1; i<=31; i++) headerRow += `<th colspan="3" class="text-center d-print-none" style="font-size:0.6rem;">${i}</th>`;
             headerRow += `<th colspan="3" class="text-center bg-secondary text-white">Total</th></tr><tr>`;
-            for(let i=1; i<=31; i++) headerRow += `<th class="d-print-none" style="font-size:0.5rem;" title="Dhuha">Dh</th><th class="d-print-none" style="font-size:0.5rem;" title="Dhuhur">Dhr</th><th class="d-print-none" style="font-size:0.5rem;" title="Haid">H</th>`;
+            for(let i=1; i<=31; i++) headerRow += `<th class="d-print-none" style="font-size:0.55rem;" title="Dhuha">Dh</th><th class="d-print-none" style="font-size:0.55rem;" title="Dhuhur">Dhr</th><th class="d-print-none" style="font-size:0.55rem;" title="Haid">H</th>`;
             headerRow += `<th class="text-center" style="font-size:0.7rem">Dh</th><th class="text-center" style="font-size:0.7rem">Dhr</th><th class="text-center" style="font-size:0.7rem">H</th></tr>`;
 
             let bodyRows = "";
@@ -886,9 +955,9 @@
                     if(h.dhuhur) cDhr++;
                     if(h.haid) cH++;
 
-                    rowHTML += `<td class="d-print-none text-center text-primary">${vDh}</td><td class="d-print-none text-center text-success">${vDhr}</td><td class="d-print-none text-center text-warning">${vH}</td>`;
+                    rowHTML += `<td class="d-print-none text-center text-primary">${vDh}</td><td class="d-print-none text-center text-success">${vDhr}</td><td class="d-print-none text-center text-warning fw-bold">${vH}</td>`;
                 }
-                rowHTML += `<td class="text-center fw-bold">${cDh}</td><td class="text-center fw-bold">${cDhr}</td><td class="text-center fw-bold">${cH}</td></tr>`;
+                rowHTML += `<td class="text-center fw-bold text-primary">${cDh}</td><td class="text-center fw-bold text-success">${cDhr}</td><td class="text-center fw-bold text-danger">${cH}</td></tr>`;
                 bodyRows += rowHTML;
             });
             $('#tabelRekapData thead').html(headerRow);
@@ -896,6 +965,7 @@
         }
 
         function exportToCSV() {
+            if (!rekapDataCache || rekapDataCache.length === 0) return Swal.fire('Info', 'Tidak ada data untuk diekspor', 'info');
             let csv = [];
             let header = ["No", "Nama Siswa", "Kelas"];
             for(let i=1; i<=31; i++) { header.push(i+"_Dhuha"); header.push(i+"_Dhuhur"); header.push(i+"_Haid"); }
@@ -917,24 +987,31 @@
                 csv.push(r.join(","));
             });
 
-            let blob = new Blob([csv.join("\n")], { type: "text/csv" });
+            let blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
             let link = document.createElement("a");
-            link.download = `Rekap_Sholat_Haid_Siswa.csv`;
+            link.download = `Rekap_Sholat_Haid_Siswa_${$('#filterBulan').val()}.csv`;
             link.href = window.URL.createObjectURL(blob);
             link.click();
         }
 
         function exportToPDF() {
-            if (!window.jspdf) return Swal.fire('Error', 'Library PDF belum siap.', 'error');
+            if (!window.jspdf) return Swal.fire('Error', 'Library PDF belum dimuat.', 'error');
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
-            doc.text("Laporan Rekap Presensi Sholat & Haid Siswa", 15, 15);
-            doc.save("Rekap_Sholat_Haid_Siswa.pdf");
+            doc.text("Laporan Rekap Presensi Sholat & Haid Siswa", 14, 15);
+            
+            doc.autoTable({ 
+                html: '#tabelRekapData',
+                startY: 20,
+                styles: { fontSize: 6 },
+                headStyles: { fillColor: [40, 40, 40] }
+            });
+            doc.save(`Rekap_Sholat_Haid_${$('#filterBulan').val()}.pdf`);
         }
 
         function printRekap() { 
             document.body.classList.add('printing-rekap');
-            setTimeout(() => { window.print(); document.body.classList.remove('printing-rekap'); }, 1000);
+            setTimeout(() => { window.print(); document.body.classList.remove('printing-rekap'); }, 800);
         }
         
         function renderIdCardList() {
@@ -944,38 +1021,62 @@
 
             dataPersonal.forEach((p) => {
                 if (filterKls === "SEMUA" || p.ket === filterKls) {
-                    container.insertAdjacentHTML('beforeend', `<label class="list-group-item"><input class="form-check-input me-2 chk-card" type="checkbox" value="${p.id}">${p.nama} <span class="badge bg-secondary ms-1" style="font-size:0.6rem">${p.ket}</span></label>`);
+                    container.insertAdjacentHTML('beforeend', `<label class="list-group-item py-1 px-2"><input class="form-check-input me-2 chk-card" type="checkbox" value="${p.id}"><span class="small">${p.nama}</span> <span class="badge bg-secondary ms-1" style="font-size:0.55rem">${p.ket}</span></label>`);
                 }
             });
+            generateIdCards(false); 
         }
 
         function toggleAllCards(el) {
             document.querySelectorAll('.chk-card').forEach(cb => cb.checked = el.checked);
+            generateIdCards(false);
         }
 
         function generateIdCards(doPrint = false) {
             let checkedIds = Array.from(document.querySelectorAll('.chk-card:checked')).map(cb => cb.value);
-            if (checkedIds.length === 0 && doPrint) return Swal.fire('Info', 'Pilih minimal satu siswa', 'info');
-
             let printArea = document.getElementById('printAreaIDCard');
             printArea.innerHTML = ''; 
 
+            if (checkedIds.length === 0 && doPrint) return Swal.fire('Info', 'Pilih minimal satu siswa untuk dicetak', 'info');
+
             let namaSekolah = $('#namaLembaga').text();
             let logoSrc = $('#logo img').attr('src');
-            let bgStyle = `background-image: url('${globalBackground}')`; 
+            let bgStyle = globalBackground ? `background-image: url('${globalBackground}')` : ''; 
 
             checkedIds.forEach(id => {
                 let p = dataPersonal.find(x => x.id === id);
                 if (p) {
                     let qrId = `qr-${p.id}`;
-                    let htmlFront = `<div class="id-card-wrapper" style="${bgStyle}"><div class="id-card-overlay"></div><div class="id-card-content"><div class="idc-header"><img src="${logoSrc}" class="idc-logo"><div class="idc-school">${namaSekolah}</div></div><div class="idc-body"><div class="idc-photo-box"><img src="${cekGambar(p.foto)}" class="idc-photo"></div><div class="idc-details"><div class="idc-name">${p.nama}</div><div class="idc-role">SISWA</div><div class="idc-id">${p.id}</div><div class="idc-ket">${p.ket}</div></div></div><div class="idc-qr" id="${qrId}"></div></div></div>`;
+                    let htmlFront = `
+                        <div class="id-card-wrapper" style="${bgStyle}">
+                            <div class="id-card-overlay"></div>
+                            <div class="id-card-content">
+                                <div class="idc-header">
+                                    <img src="${logoSrc}" class="idc-logo" alt="Logo">
+                                    <div class="idc-school">${namaSekolah}</div>
+                                </div>
+                                <div class="idc-body">
+                                    <div class="idc-photo-box">
+                                        <img src="${cekGambar(p.foto)}" class="idc-photo" alt="Foto">
+                                    </div>
+                                    <div class="idc-details">
+                                        <div class="idc-name">${p.nama}</div>
+                                        <div class="idc-role">SISWA</div>
+                                        <div class="idc-id">ID: ${p.id}</div>
+                                        <div class="idc-ket">Kelas: ${p.ket}</div>
+                                    </div>
+                                </div>
+                                <div class="idc-qr" id="${qrId}"></div>
+                            </div>
+                        </div>`;
                     printArea.insertAdjacentHTML('beforeend', htmlFront);
-                    new QRCode(document.getElementById(qrId), { text: p.id, width: 70, height: 70 });
+                    new QRCode(document.getElementById(qrId), { text: p.id, width: 62, height: 62 });
                 }
             });
+
             if (doPrint) {
                 document.body.classList.add('printing-idcard');
-                setTimeout(() => { window.print(); document.body.classList.remove('printing-idcard'); }, 1000);
+                setTimeout(() => { window.print(); document.body.classList.remove('printing-idcard'); }, 800);
             }
         }
     </script>
