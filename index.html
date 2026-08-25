@@ -441,7 +441,7 @@
         let currentSesi = 'DHUHA';
         let rekapDataCache = [];
         let globalBackground = ""; 
-        let globalSettings = []; 
+        let globalSettings = {}; 
 
         $(document).ready(function() {
             firstLoad();
@@ -709,15 +709,28 @@
                     updateClock();
                     startQRScanner();
 
-                    if (response.setting && response.setting.length > 2) {
-                        globalSettings = response.setting; 
-                        $('#namaLembaga').text(response.setting[0].Value);
-                        $('#footerSchool').text(response.setting[0].Value);
-                        $('#alamatLembaga').text(response.setting[1].Value);
-                        $('#logo').html(`<img src="${cekGambar(response.setting[2].Value)}" class="logo-img">`);
-                        globalBackground = cekGambar(response.setting[3].Value); 
+                    if (response.setting) {
+                        globalSettings = response.setting;
+                        
+                        // Pembacaan Setting Aman (Mendukung Key-Value Object maupun Array Index)
+                        let getVal = (key, idx) => response.setting[key] || (response.setting[idx] ? response.setting[idx].Value : '');
+
+                        let namaLembaga = getVal('NAMA LEMBAGA', 0) || "Sekolah";
+                        let alamatLembaga = getVal('ALAMAT', 1) || "";
+                        let logoUrl = getVal('LOGO', 2);
+                        let bgUrl = getVal('BACKGROUND', 3);
+                        let password = getVal('PASSWORD', 4) || "12345";
+
+                        $('#namaLembaga').text(namaLembaga);
+                        $('#footerSchool').text(namaLembaga);
+                        $('#alamatLembaga').text(alamatLembaga);
+                        $('#logo').html(`<img src="${cekGambar(logoUrl)}" class="logo-img">`);
+                        
+                        globalBackground = cekGambar(bgUrl); 
                         $('body').css('background-image', `url('${globalBackground}')`);
-                        sessionStorage.setItem('pw', response.setting[4].Value);
+                        
+                        // Simpan Password yang terverifikasi ke Session
+                        sessionStorage.setItem('pw', password);
                     }
 
                     dataPersonal = [];
@@ -725,14 +738,13 @@
                     dList.innerHTML = '';
                     let kelasSet = new Set();
 
-                    // PARSING MEMANFAATKAN STRUKTUR PERSONAL (DENGAN JENIS KELAMIN, TANPA PAS FOTO)
                     if (response.personal) {
                         if (typeof response.personal === 'string') {
                             response.personal.split("#").forEach(item => {
                                 let parts = item.split(";");
                                 let id = parts[0];
                                 let nama = parts[1];
-                                let jk = parts[2] ? parts[2].toUpperCase().trim() : ''; // Jenis Kelamin menggantikan Role
+                                let jk = parts[2] ? parts[2].toUpperCase().trim() : ''; 
                                 let ket = parts[3];
                                 let baris = parts[4];
 
@@ -831,7 +843,7 @@
                     list.insertAdjacentHTML('beforeend', item);
                 }
             }
-            if(document.getElementById('banyak')) document.getElementById('banyak').text = `${count} Data`;
+            if(document.getElementById('banyak')) document.getElementById('banyak').innerText = `${count} Data`;
         }
 
         function bersihkanPresensi() {
@@ -888,10 +900,11 @@
                     $('#printHeader').removeClass('d-none');
                     $('#printBulan').text(bulan + " " + new Date().getFullYear());
                     
-                    if (globalSettings && globalSettings.length > 2) {
-                        $('#printLogoKiri').attr('src', cekGambar(globalSettings[2].Value));
-                        $('#printHeader1').text(globalSettings[0].Value);
-                        $('#printHeader3').text(globalSettings[1].Value);
+                    if (globalSettings) {
+                        let getVal = (key, idx) => globalSettings[key] || (globalSettings[idx] ? globalSettings[idx].Value : '');
+                        $('#printLogoKiri').attr('src', cekGambar(getVal('LOGO', 2)));
+                        $('#printHeader1').text(getVal('NAMA LEMBAGA', 0));
+                        $('#printHeader3').text(getVal('ALAMAT', 1));
                     }
                 } else {
                     Swal.fire('Gagal', response.error || 'Gagal memuat data.', 'error');
@@ -996,7 +1009,6 @@
             document.querySelectorAll('.chk-card').forEach(cb => cb.checked = el.checked);
         }
 
-        /* GENERATE KARTU IDENTITAS PRESISI (TANPA PAS FOTO & LABEL JK) */
         function generateIdCards(doPrint = false) {
             let checkedIds = Array.from(document.querySelectorAll('.chk-card:checked')).map(cb => cb.value);
             if (checkedIds.length === 0 && doPrint) return Swal.fire('Info', 'Pilih minimal satu data', 'info');
